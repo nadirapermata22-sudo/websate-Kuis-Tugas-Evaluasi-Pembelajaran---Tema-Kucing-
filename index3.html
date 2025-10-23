@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis & Tugas: Jaringan Komputer & Internet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #0a0f2d, #1a237e, #0d47a1, #1565c0);
+            color: #e3f2fd;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Efek bintang di latar belakang */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+            animation: shootingStar 8s linear infinite;
+        }
+
+        @keyframes shootingStar {
+            0% {
+                top: -50px;
+                right: -50px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                right: 100vw;
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            animation: fadeInDown 1.5s ease;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(33, 150, 243, 0.9);
+            color: #bbdefb;
+            background: linear-gradient(to right, #bbdefb, #64b5f6, #2196f3, #0d47a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 4s infinite alternate, float 6s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(33, 150, 243, 0.8); }
+            50% { text-shadow: 0 0 20px rgba(33, 150, 243, 1), 0 0 30px rgba(33, 150, 243, 0.6); }
+            100% { text-shadow: 0 0 15px rgba(33, 150, 243, 0.9), 0 0 25px rgba(33, 150, 243, 0.5); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #90caf9;
+            animation: fadeIn 2s ease;
+            text-shadow: 0 0 10px rgba(144, 202, 249, 0.7);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(13, 71, 161, 0.7);
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            animation: slideIn 1.2s ease;
+            border: 1px solid rgba(30, 136, 229, 0.5);
+        }
+
+        .tab-button {
+            padding: 14px 28px;
+            margin: 0 10px;
+            background: transparent;
+            border: none;
+            color: #e3f2fd;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .tab-button:hover:before {
+            left: 100%;
+        }
+
+        .tab-button:hover {
+            background: rgba(30, 136, 229, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-button.active {
+            background: #1e88e5;
+            box-shadow: 0 0 20px rgba(30, 136, 229, 0.8);
+            transform: translateY(-3px);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(13, 71, 161, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(30, 136, 229, 0.4);
+            animation: fadeIn 1s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h2 {
+            color: #bbdefb;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(30, 136, 229, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(187, 222, 251, 0.5);
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(21, 101, 192, 0.4);
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            animation: slideIn 0.6s ease;
+            border: 1px solid rgba(30, 136, 229, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #1e88e5, #0d47a1);
+        }
+
+        .question:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .question p {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: rgba(30, 136, 229, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(30, 136, 229, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .option:hover:before {
+            left: 100%;
+        }
+
+        .option:hover {
+            background: rgba(30, 136, 229, 0.5);
+            transform: translateX(8px);
+        }
+
+        .option.selected {
+            background: rgba(30, 136, 229, 0.7);
+            box-shadow: 0 0 15px rgba(30, 136, 229, 0.6);
+            transform: translateX(12px);
+        }
+
+        .task {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(21, 101, 192, 0.4);
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            animation: slideIn 0.6s ease;
+            border: 1px solid rgba(30, 136, 229, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #1e88e5, #0d47a1);
+        }
+
+        .task:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .task p {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 18px;
+            background: rgba(13, 71, 161, 0.5);
+            border: 1px solid rgba(30, 136, 229, 0.5);
+            border-radius: 10px;
+            color: #e3f2fd;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 140px;
+            transition: all 0.4s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #1e88e5;
+            box-shadow: 0 0 15px rgba(30, 136, 229, 0.6);
+            transform: scale(1.02);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 35px;
+        }
+
+        button {
+            padding: 15px 35px;
+            background: #1e88e5;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover:before {
+            left: 100%;
+        }
+
+        button:hover {
+            background: #1565c0;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 35px;
+            padding: 25px;
+            background: rgba(21, 101, 192, 0.4);
+            border-radius: 15px;
+            display: none;
+            animation: fadeIn 1s ease;
+            border: 1px solid rgba(30, 136, 229, 0.4);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .score {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #bbdefb;
+            text-shadow: 0 0 10px rgba(187, 222, 251, 0.5);
+        }
+
+        .feedback {
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .moon {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 35px 35px, #f5f5f5, #e0e0e0, #bdbdbd);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.9);
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .planet {
+            position: fixed;
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 40s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .planet-1 {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 15px 15px, #ff9800, #f57c00, #e65100);
+            top: 15%;
+            left: 8%;
+            animation-duration: 35s;
+        }
+
+        .planet-2 {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 20px 20px, #4caf50, #2e7d32, #1b5e20);
+            bottom: 20%;
+            right: 12%;
+            animation-duration: 45s;
+        }
+
+        .planet-3 {
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle at 10px 10px, #e91e63, #c2185b, #880e4f);
+            top: 65%;
+            left: 5%;
+            animation-duration: 30s;
+        }
+
+        .planet-4 {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 18px 18px, #9c27b0, #7b1fa2, #4a148c);
+            top: 25%;
+            right: 8%;
+            animation-duration: 50s;
+        }
+
+        .planet-5 {
+            width: 55px;
+            height: 55px;
+            background: radial-gradient(circle at 12px 12px, #00bcd4, #0097a7, #006064);
+            bottom: 15%;
+            left: 15%;
+            animation-duration: 38s;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.05); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2196f3;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px #2196f3;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 1; box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+            50% { transform: scale(1.2); opacity: 0.7; box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+            100% { transform: scale(0.8); opacity: 1; box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(30, 136, 229, 0.3);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #1e88e5, #0d47a1);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.7s ease;
+            box-shadow: 0 0 10px rgba(30, 136, 229, 0.7);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #90caf9;
+            font-size: 1rem;
+            animation: fadeIn 2.5s ease;
+            text-shadow: 0 0 5px rgba(144, 202, 249, 0.5);
+        }
+
+        .floating-icon {
+            position: fixed;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.8);
+            animation: float 5s ease-in-out infinite;
+            z-index: -1;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background-color: #f44336;
+            opacity: 0;
+            z-index: 1000;
+            border-radius: 50%;
+        }
+
+        .nebula {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(63,81,181,0.3) 0%, rgba(33,150,243,0.1) 40%, transparent 70%);
+            filter: blur(40px);
+            z-index: -1;
+            animation: nebulaFloat 20s ease-in-out infinite;
+        }
+
+        .nebula-1 {
+            top: 10%;
+            left: 5%;
+        }
+
+        .nebula-2 {
+            bottom: 10%;
+            right: 5%;
+        }
+
+        @keyframes nebulaFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            50% { transform: translate(20px, -20px) scale(1.1); opacity: 0.7; }
+        }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .tab-button {
+                margin: 5px 0;
+                justify-content: center;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .moon, .planet {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="moon"></div>
+    
+    <!-- Planet-planet -->
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
+    <div class="planet planet-3"></div>
+    <div class="planet planet-4"></div>
+    <div class="planet planet-5"></div>
+    
+    <!-- Nebula -->
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    
+    <!-- Ikon mengambang -->
+    <div class="floating-icon" style="top: 12%; left: 3%; animation-delay: 0s;"><i class="fas fa-wifi"></i></div>
+    <div class="floating-icon" style="top: 22%; right: 6%; animation-delay: 0.7s;"><i class="fas fa-satellite"></i></div>
+    <div class="floating-icon" style="bottom: 18%; left: 4%; animation-delay: 1.4s;"><i class="fas fa-shield-alt"></i></div>
+    <div class="floating-icon" style="bottom: 28%; right: 3%; animation-delay: 2.1s;"><i class="fas fa-network-wired"></i></div>
+    <div class="floating-icon" style="top: 60%; left: 10%; animation-delay: 2.8s;"><i class="fas fa-server"></i></div>
+    <div class="floating-icon" style="top: 45%; right: 10%; animation-delay: 3.5s;"><i class="fas fa-globe"></i></div>
+
+    <div class="container">
+        <header>
+            <h1>Jaringan Komputer & Internet</h1>
+            <p class="subtitle" id="subtitle">Kuis Interaktif dan Tugas Pembelajaran</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" data-tab="kuis">
+                <i class="fas fa-gamepad"></i> Kuis Interaktif
+            </button>
+            <button class="tab-button" data-tab="tugas">
+                <i class="fas fa-tasks"></i> Tugas
+            </button>
+            <button class="tab-button" data-tab="materi">
+                <i class="fas fa-book"></i> Materi Singkat
+            </button>
+        </div>
+
+        <!-- Tab Kuis -->
+        <div class="tab-content active" id="kuis">
+            <h2><i class="fas fa-gamepad"></i> Kuis Interaktif: Jaringan Komputer</h2>
+            <p>Pilihlah jawaban yang paling tepat untuk setiap pertanyaan berikut:</p>
+
+            <div class="question">
+                <p><span class="pulse"></span>1. Sistem yang menghubungkan dua atau lebih komputer untuk berbagai data yaitu ...</p>
+                <div class="options">
+                    <div class="option" data-correct="true">
+                        <i class="far fa-circle"></i> A. Jaringan komputer
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> B. Jaringan internet
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> C. WiFi
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> D. Bluetooth
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="pulse"></span>2. Jaringan komputer yang mencakup wilayah yang cenderung kecil adalah ...</p>
+                <div class="options">
+                    <div class="option">
+                        <i class="far fa-circle"></i> A. WAN
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> B. MAN
+                    </div>
+                    <div class="option" data-correct="true">
+                        <i class="far fa-circle"></i> C. LAN
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> D. PAN
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="pulse"></span>3. Kelebihan jaringan internet adalah ...</p>
+                <div class="options">
+                    <div class="option">
+                        <i class="far fa-circle"></i> A. Tempat berkembangnya aktivitas ilegal
+                    </div>
+                    <div class="option" data-correct="true">
+                        <i class="far fa-circle"></i> B. Pertukaran data
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> C. Masalah kesehatan
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> D. Kekerasan
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="pulse"></span>4. Menghubungkan HP dengan Laptop menggunakan Bluetooth merupakan contoh dari jaringan ...</p>
+                <div class="options">
+                    <div class="option">
+                        <i class="far fa-circle"></i> A. WLAN
+                    </div>
+                    <div class="option" data-correct="true">
+                        <i class="far fa-circle"></i> B. WPAN
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> C. WiFi
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> D. WMAN
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="pulse"></span>5. Teknik pengkodean data yang berguna untuk menjaga data/file dari pemakai yang tidak diinginkan disebut ...</p>
+                <div class="options">
+                    <div class="option" data-correct="true">
+                        <i class="far fa-circle"></i> A. Enkripsi
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> B. Deskripsi
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> C. Autentikasi
+                    </div>
+                    <div class="option">
+                        <i class="far fa-circle"></i> D. Security
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button id="submitKuis">
+                    <i class="fas fa-paper-plane"></i> Kirim Jawaban
+                </button>
+                <button id="resetKuis">
+                    <i class="fas fa-redo"></i> Ulangi Kuis
+                </button>
+            </div>
+
+            <div id="result">
+                <div class="score">Skor Anda: <span id="scoreValue">0</span>/5</div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Tab Tugas -->
+        <div class="tab-content" id="tugas">
+            <h2><i class="fas fa-tasks"></i> Tugas: Jaringan Nirkabel & Keamanan Data</h2>
+            <p>Jawablah pertanyaan-pertanyaan berikut dengan jelas dan lengkap:</p>
+
+            <div class="task">
+                <p><span class="pulse"></span>1. Jelaskan perbedaan antara jaringan WPAN dan WLAN!</p>
+                <textarea placeholder="Tulis jawaban Anda di sini..."></textarea>
+            </div>
+
+            <div class="task">
+                <p><span class="pulse"></span>2. Sebutkan dan jelaskan keuntungan menggunakan jaringan nirkabel (wireless)!</p>
+                <textarea placeholder="Tulis jawaban Anda di sini..."></textarea>
+            </div>
+
+            <div class="task">
+                <p><span class="pulse"></span>3. Apa yang dimaksud dengan enkripsi data dan mengapa penting untuk keamanan data?</p>
+                <textarea placeholder="Tulis jawaban Anda di sini..."></textarea>
+            </div>
+
+            <div class="buttons">
+                <button id="simpanTugas">
+                    <i class="fas fa-save"></i> Simpan Tugas
+                </button>
+                <button id="resetTugas">
+                    <i class="fas fa-trash"></i> Hapus Jawaban
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Materi -->
+        <div class="tab-content" id="materi">
+            <h2><i class="fas fa-book"></i> Materi Singkat: Jaringan Komputer & Internet</h2>
+            
+            <div class="task">
+                <h3><i class="fas fa-network-wired"></i> Jaringan Komputer</h3>
+                <p>Jaringan komputer adalah sistem yang menghubungkan dua atau lebih perangkat komputer untuk melakukan pertukaran data, informasi, atau sumber daya.</p>
+                <p><strong>Manfaat jaringan:</strong></p>
+                <ul>
+                    <li>Berbagi sumber daya (printer, file, dll)</li>
+                    <li>Komunikasi yang lebih efisien</li>
+                    <li>Akses informasi yang lebih luas</li>
+                    <li>Kolaborasi yang lebih mudah</li>
+                </ul>
+            </div>
+
+            <div class="task">
+                <h3><i class="fas fa-wifi"></i> Jenis-Jenis Jaringan Nirkabel</h3>
+                <p><strong>WPAN (Wireless Personal Area Network):</strong> Jaringan dengan jangkauan sangat terbatas (beberapa meter), contoh: Bluetooth.</p>
+                <p><strong>WLAN (Wireless Local Area Network):</strong> Jaringan nirkabel dengan jangkauan lebih luas, contoh: WiFi.</p>
+                <p><strong>WMAN (Wireless Metropolitan Area Network):</strong> Jaringan yang mencakup area metropolitan.</p>
+                <p><strong>WWAN (Wireless Wide Area Network):</strong> Jaringan dengan jangkauan sangat luas, contoh: jaringan seluler.</p>
+            </div>
+
+            <div class="task">
+                <h3><i class="fas fa-shield-alt"></i> Keamanan Data</h3>
+                <p><strong>Enkripsi:</strong> Proses mengubah data menjadi bentuk yang tidak dapat dibaca oleh pihak yang tidak berwenang.</p>
+                <p><strong>Jenis-jenis enkripsi:</strong></p>
+                <ul>
+                    <li>Symmetric encryption (kunci rahasia)</li>
+                    <li>Asymmetric encryption (kunci publik)</li>
+                </ul>
+                <p><strong>Metode keamanan lainnya:</strong> Firewall, autentikasi, backup data.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Modul Ajar Jaringan Komputer dan Internet - SMPN 19 Kupang</p>
+            <p>&copy; 2025 - Dibuat untuk Pembelajaran Interaktif</p>
+        </footer>
+    </div>
+
+    <script>
+        // Membuat efek bintang
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 300; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.width = Math.random() * 4 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Membuat bintang jatuh
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            shootingStar.style.left = Math.random() * 100 + '%';
+            shootingStar.style.animationDelay = Math.random() * 10 + 's';
+            document.body.appendChild(shootingStar);
+            
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 9000);
+        }
+        
+        // Buat beberapa bintang jatuh
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createShootingStar, i * 2000);
+        }
+        
+        // Terus buat bintang jatuh baru
+        setInterval(createShootingStar, 5000);
+
+        // Fungsi tab
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Hapus kelas aktif dari semua tab dan konten
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Tambah kelas aktif ke tab yang diklik dan kontennya
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Update progress bar
+                updateProgressBar();
+            });
+        });
+
+        // Fungsi kuis
+        const options = document.querySelectorAll('.option');
+        const submitKuisBtn = document.getElementById('submitKuis');
+        const resetKuisBtn = document.getElementById('resetKuis');
+        const resultDiv = document.getElementById('result');
+        const scoreValue = document.getElementById('scoreValue');
+        const feedbackDiv = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress');
+
+        // Update progress bar
+        function updateProgressBar() {
+            const activeTab = document.querySelector('.tab-button.active').getAttribute('data-tab');
+            let progress = 0;
+            
+            if (activeTab === 'kuis') progress = 25;
+            else if (activeTab === 'tugas') progress = 50;
+            else if (activeTab === 'materi') progress = 75;
+            
+            progressBar.style.width = progress + '%';
+        }
+
+        // Inisialisasi progress bar
+        updateProgressBar();
+
+        options.forEach(option => {
+            option.addEventListener('click', ()
