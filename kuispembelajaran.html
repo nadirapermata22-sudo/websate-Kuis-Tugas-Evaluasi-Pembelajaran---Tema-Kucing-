@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis & Tugas: Evaluasi Pembelajaran - Tema Kucing</title>
+    <style>
+        :root {
+            --primary: #FFB6C1; /* Pink muda */
+            --secondary: #FFD1DC; /* Pink lebih muda */
+            --accent: #FF69B4; /* Pink hot */
+            --dark: #D87093; /* Pink tua */
+            --light: #FFF0F5; /* Lavender blush */
+            --yellow: #FFD700; /* Kuning emas */
+            --blue: #87CEEB; /* Biru langit */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFE4E6 0%, #FFF0F5 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #555;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M30,30 Q50,10 70,30 T90,50 T70,70 T50,90 T30,70 T10,50 T30,30 Z" fill="none" stroke="%23FFB6C1" stroke-width="1" opacity="0.2"/></svg>');
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid white;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" opacity="0.3"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 5.5C14.8 5.2 14.4 5 14 5H10C9.6 5 9.2 5.2 9 5.5L3 7V9L10 11V16H8V18H16V16H14V11L21 9Z"/></svg>');
+            background-size: contain;
+            transform: rotate(15deg);
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" opacity="0.3"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 5.5C14.8 5.2 14.4 5 14 5H10C9.6 5 9.2 5.2 9 5.5L3 7V9L10 11V16H8V18H16V16H14V11L21 9Z"/></svg>');
+            background-size: contain;
+            transform: rotate(-15deg);
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-size: 2.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .kitten-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            display: block;
+        }
+        
+        .subtitle {
+            color: white;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            background: var(--secondary);
+            color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .tab:hover::before {
+            left: 100%;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .tab:hover:not(.active) {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFB6C1" opacity="0.1"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 5.5C14.8 5.2 14.4 5 14 5H10C9.6 5 9.2 5.2 9 5.5L3 7V9L10 11V16H8V18H16V16H14V11L21 9Z"/></svg>');
+            background-size: contain;
+            transform: rotate(15deg);
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .section-title {
+            color: var(--accent);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent);
+            transition: transform 0.3s;
+        }
+        
+        .question:hover {
+            transform: translateY(-3px);
+        }
+        
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--secondary);
+        }
+        
+        .option:hover {
+            background: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--dark);
+        }
+        
+        .option.correct {
+            background: #98FB98;
+            color: #2E8B57;
+            border-color: #2E8B57;
+        }
+        
+        .option.incorrect {
+            background: #FFB6C1;
+            color: #B22222;
+            border-color: #B22222;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-top: 10px;
+            border: 1px solid var(--dark);
+            box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            background: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        .btn-check {
+            background: #98FB98;
+            color: #2E8B57;
+        }
+        
+        .btn-check:hover {
+            background: #90EE90;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            border: 1px solid;
+        }
+        
+        .result.success {
+            background: #F0FFF0;
+            color: #2E8B57;
+            border-color: #98FB98;
+            display: block;
+        }
+        
+        .result.error {
+            background: #FFF0F5;
+            color: #B22222;
+            border-color: #FFB6C1;
+            display: block;
+        }
+        
+        .task-item {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--secondary);
+            transition: transform 0.3s;
+        }
+        
+        .task-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .task-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .task-title::before {
+            content: "🐾";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .task-description {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--secondary);
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 10px;
+            background: white;
+            font-family: inherit;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            color: var(--accent);
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 1px solid var(--secondary);
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.5s;
+            border-radius: 6px;
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            padding: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: inline-block;
+            width: 100%;
+            border: 2px solid var(--primary);
+        }
+        
+        .materi-item {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent);
+        }
+        
+        .materi-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .materi-title::before {
+            content: "📚";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .kitten-decoration {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 3rem;
+            animation: bounce 2s infinite;
+            z-index: 100;
+        }
+        
+        .paw-print {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+        
+        @media (min-width: 768px) {
+            .options {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .timer {
+                width: auto;
+                float: right;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="kitten-icon">🐱</span>
+            <h1>Kuis & Tugas: Evaluasi Pembelajaran</h1>
+            <p class="subtitle">Materi Microteaching - Evaluasi Pembelajaran dengan Tema Kucing Imut</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-target="kuis">Kuis Interaktif 🐾</div>
+            <div class="tab" data-target="tugas">Tugas Kelompok 🎀</div>
+            <div class="tab" data-target="materi">Ringkasan Materi 📚</div>
+        </div>
+        
+        <!-- Kuis Section -->
+        <section id="kuis" class="content-section active">
+            <h2 class="section-title">Kuis Evaluasi Pembelajaran</h2>
+            <p>Jawablah pertanyaan-pertanyaan berikut dengan memilih jawaban yang tepat!</p>
+            
+            <div class="timer">Waktu: <span id="time">05:00</span></div>
+            <div class="progress-bar">
+                <div class="progress" id="quiz-progress"></div>
+            </div>
+            
+            <div id="questions-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+            
+            <button id="check-answers" class="btn btn-check">Periksa Jawaban 🐱</button>
+            <button id="reset-quiz" class="btn">Ulangi Kuis 🔄</button>
+            
+            <div id="quiz-result" class="result"></div>
+            <div id="score-display" class="score-display"></div>
+        </section>
+        
+        <!-- Tugas Section -->
+        <section id="tugas" class="content-section">
+            <h2 class="section-title">Tugas Kelompok: Evaluasi Pembelajaran</h2>
+            <p>Kerjakan tugas berikut bersama kelompok Anda dan presentasikan hasilnya!</p>
+            
+            <div class="task-item">
+                <div class="task-title">Tugas 1: Analisis Kasus Evaluasi</div>
+                <div class="task-description">
+                    <p>Bacalah kasus berikut:</p>
+                    <p>"Seorang guru melakukan evaluasi pembelajaran di kelasnya dengan memberikan tes tertulis di akhir pembelajaran. Hasilnya, 60% siswa mencapai nilai di atas KKM, sementara 40% sisanya di bawah KKM."</p>
+                    <p>Analisislah:</p>
+                    <ol>
+                        <li>Jenis evaluasi apa yang dilakukan guru tersebut?</li>
+                        <li>Apa tujuan evaluasi tersebut?</li>
+                        <li>Berdasarkan prinsip evaluasi, apakah evaluasi tersebut sudah valid dan reliabel? Jelaskan!</li>
+                        <li>Rekomendasi tindak lanjut apa yang dapat diberikan?</li>
+                    </ol>
+                </div>
+                <textarea placeholder="Tulis jawaban kelompok Anda di sini..."></textarea>
+                <button class="btn">Simpan Jawaban 💾</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-title">Tugas 2: Pengembangan Instrumen Evaluasi</div>
+                <div class="task-description">
+                    <p>Buatlah sebuah instrumen evaluasi formatif untuk mata pelajaran pilihan Anda dengan ketentuan:</p>
+                    <ul>
+                        <li>Tentukan tujuan pembelajaran</li>
+                        <li>Buat 3-5 butir soal/pertanyaan</li>
+                        <li>Sesuaikan dengan prinsip validitas dan reliabilitas</li>
+                        <li>Tentukan kriteria penilaian</li>
+                    </ul>
+                </div>
+                <textarea placeholder="Tulis instrumen evaluasi yang Anda buat di sini..."></textarea>
+                <button class="btn">Simpan Jawaban 💾</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-title">Tugas 3: Presentasi Hasil Diskusi</div>
+                <div class="task-description">
+                    <p>Presentasikan hasil diskusi kelompok Anda dengan ketentuan:</p>
+                    <ul>
+                        <li>Durasi presentasi: 5-7 menit</li>
+                        <li>Siapkan media presentasi (PPT atau poster)</li>
+                        <li>Sampaikan kesimpulan dari analisis yang telah dilakukan</li>
+                        <li>Siapkan diri untuk sesi tanya jawab</li>
+                    </ul>
+                    <p><strong>Kelompok akan dinilai berdasarkan:</strong></p>
+                    <ul>
+                        <li>Kedalaman analisis (30%)</li>
+                        <li>Keterampilan presentasi (25%)</li>
+                        <li>Kerja sama tim (25%)</li>
+                        <li>Kemampuan menjawab pertanyaan (20%)</li>
+                    </ul>
+                </div>
+                <button class="btn">Upload Presentasi 📤</button>
+            </div>
+        </section>
+        
+        <!-- Materi Section -->
+        <section id="materi" class="content-section">
+            <h2 class="section-title">Ringkasan Materi: Evaluasi Pembelajaran</h2>
+            
+            <div class="materi-item">
+                <div class="materi-title">Pengertian Evaluasi Pembelajaran</div>
+                <div class="task-description">
+                    <p>Evaluasi pembelajaran adalah proses sistematis untuk mengumpulkan, menganalisis, dan menafsirkan data guna menentukan sejauh mana tujuan pembelajaran tercapai.</p>
+                </div>
+            </div>
+            
+            <div class="materi-item">
+                <div class="materi-title">Tujuan Evaluasi Pembelajaran</div>
+                <div class="task-description">
+                    <ul>
+                        <li>Mengetahui pencapaian kompetensi siswa</li>
+                        <li>Menilai efektivitas metode dan strategi pembelajaran</li>
+                        <li>Memberikan umpan balik untuk perbaikan proses pembelajaran</li>
+                        <li>Menentukan tindak lanjut (remedial, pengayaan, atau penguatan)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="materi-item">
+                <div class="materi-title">Prinsip-Prinsip Evaluasi</div>
+                <div class="task-description">
+                    <p><strong>Validitas:</strong> Sejauh mana suatu instrumen evaluasi mampu mengukur apa yang seharusnya diukur sesuai dengan tujuan yang telah ditetapkan.</p>
+                    <p><strong>Reliabilitas:</strong> Tingkat konsistensi atau keterandalan suatu instrumen evaluasi ketika digunakan berulang kali pada kondisi yang sama.</p>
+                </div>
+            </div>
+            
+            <div class="materi-item">
+                <div class="materi-title">Jenis-Jenis Evaluasi</div>
+                <div class="task-description">
+                    <p><strong>Evaluasi Formatif:</strong> Dilakukan selama proses pembelajaran untuk perbaikan.</p>
+                    <p><strong>Evaluasi Sumatif:</strong> Dilakukan di akhir pembelajaran untuk menilai hasil.</p>
+                    <p><strong>Evaluasi Diagnostik:</strong> Untuk mengetahui kesulitan atau hambatan belajar siswa.</p>
+                </div>
+            </div>
+            
+            <div class="materi-item">
+                <div class="materi-title">Langkah-Langkah Pengembangan Evaluasi</div>
+                <div class="task-description">
+                    <ol>
+                        <li>Menentukan tujuan evaluasi</li>
+                        <li>Menyusun kisi-kisi instrumen</li>
+                        <li>Mengembangkan instrumen evaluasi</li>
+                        <li>Melakukan uji coba instrumen</li>
+                        <li>Menganalisis hasil uji coba</li>
+                        <li>Revisi instrumen</li>
+                        <li>Pelaksanaan evaluasi</li>
+                        <li>Analisis hasil evaluasi</li>
+                        <li>Pelaporan hasil evaluasi</li>
+                        <li>Tindak lanjut hasil evaluasi</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="kitten-decoration">🐈</div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and sections
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding section
+                tab.classList.add('active');
+                const targetId = tab.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // Quiz data
+        const quizData = [
+            {
+                question: "Apa pengertian evaluasi pembelajaran?",
+                options: [
+                    "Proses mengumpulkan data untuk menentukan pencapaian tujuan pembelajaran",
+                    "Kegiatan memberikan nilai kepada siswa",
+                    "Teknik mengajar yang digunakan guru",
+                    "Metode untuk mengukur kehadiran siswa"
+                ],
+                correct: 0
+            },
+            {
+                question: "Manakah yang BUKAN tujuan evaluasi pembelajaran?",
+                options: [
+                    "Mengetahui pencapaian kompetensi siswa",
+                    "Memberikan umpan balik untuk perbaikan",
+                    "Menentukan tindak lanjut pembelajaran",
+                    "Meningkatkan gaji guru"
+                ],
+                correct: 3
+            },
+            {
+                question: "Evaluasi yang dilakukan selama proses pembelajaran disebut evaluasi...",
+                options: [
+                    "Sumatif",
+                    "Formatif",
+                    "Diagnostik",
+                    "Placement"
+                ],
+                correct: 1
+            },
+            {
+                question: "Prinsip evaluasi yang berkaitan dengan konsistensi hasil pengukuran adalah...",
+                options: [
+                    "Validitas",
+                    "Reliabilitas",
+                    "Objektivitas",
+                    "Efisiensi"
+                ],
+                correct: 1
+            },
+            {
+                question: "Evaluasi yang dilakukan untuk mengetahui kesulitan belajar siswa adalah evaluasi...",
+                options: [
+                    "Sumatif",
+                    "Formatif",
+                    "Diagnostik",
+                    "Penempatan"
+                ],
+                correct: 2
+            },
+            {
+                question: "Manakah yang merupakan contoh evaluasi sumatif?",
+                options: [
+                    "Kuis di tengah pembelajaran",
+                    "Tugas kelompok",
+                    "Ujian akhir semester",
+                    "Observasi partisipasi siswa"
+                ],
+                correct: 2
+            }
+        ];
+
+        // Quiz functionality
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let timeLeft = 300; // 5 minutes in seconds
+        let timerInterval;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 300;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    checkAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update progress bar
+            const progress = ((300 - timeLeft) / 300) * 100;
+            document.getElementById('quiz-progress').style.width = `${progress}%`;
+        }
+
+        function displayQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            
+            quizData.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                
+                let optionsHTML = '';
+                q.options.forEach((option, optIndex) => {
+                    const isSelected = userAnswers[index] === optIndex;
+                    optionsHTML += `
+                        <div class="option ${isSelected ? 'selected' : ''}" data-question="${index}" data-option="${optIndex}">
+                            ${option}
+                        </div>
+                    `;
+                });
+                
+                questionElement.innerHTML = `
+                    <div class="question-text">${index + 1}. ${q.question}</div>
+                    <div class="options">${optionsHTML}</div>
+                `;
+                
+                container.appendChild(questionElement);
+            });
+            
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.getAttribute('data-question'));
+                    const optionIndex = parseInt(this.getAttribute('data-option'));
+                    
+                    // Remove selected class from all options in this question
+                    document.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Save user's answer
+                    userAnswers[questionIndex] = optionIndex;
+                });
+            });
+        }
+
+        function checkAnswers() {
+            clearInterval(timerInterval);
+            
+            let score = 0;
+            quizData.forEach((q, index) => {
+                if (userAnswers[index] === q.correct) {
+                    score++;
+                }
+                
+                // Highlight correct and incorrect answers
+                const correctOption = document.querySelector(`.option[data-question="${index}"][data-option="${q.correct}"]`);
+                correctOption.classList.add('correct');
+                
+                if (userAnswers[index] !== null && userAnswers[index] !== q.correct) {
+                    const userOption = document.querySelector(`.option[data-question="${index}"][data-option="${userAnswers[index]}"]`);
+                    userOption.classList.add('incorrect');
+                }
+            });
+            
+            const percentage = (score / quizData.length) * 100;
+            const resultElement = document.getElementById('quiz-result');
+            const scoreElement = document.getElementById('score-display');
+            
+            scoreElement.textContent = `Skor Anda: ${score}/${quizData.length} (${percentage.toFixed(1)}%)`;
+            
+            if (percentage >= 70) {
+                resultElement.textContent = 'Selamat! Anda telah menguasai materi evaluasi pembelajaran. 🎉🐱';
+                resultElement.className = 'result success';
+            } else {
+                resultElement.textContent = 'Anda perlu mempelajari kembali materi evaluasi pembelajaran. Jangan menyerah! 😸';
+                resultElement.className = 'result error';
+            }
+            
+            // Disable options after checking
+            document.querySelectorAll('.option').forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            document.getElementById('check-answers').disabled = true;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            document.getElementById('quiz-result').className = 'result';
+            document.getElementById('score-display').textContent = '';
+            document.getElementById('check-answers').disabled = false;
+            startTimer();
+            displayQuestions();
+        }
+
+        // Initialize quiz
+        document.getElementById('check-answers').addEventListener('click', checkAnswers);
+        document.getElementById('reset-quiz').addEventListener('click', resetQuiz);
+
+        // Start the quiz when page loads
+        window.addEventListener('load', () => {
+            startTimer();
+            displayQuestions();
+        });
+    </script>
+</body>
+</html>
